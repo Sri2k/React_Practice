@@ -18,9 +18,6 @@ function App() {
         >
           Learn React
         </a>
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
       </header>
     </div>
   );
