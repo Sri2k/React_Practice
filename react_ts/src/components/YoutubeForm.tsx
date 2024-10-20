@@ -1,4 +1,4 @@
-import { useForm } from "react-hook-form";
+import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
 
 let count = 0;
@@ -7,15 +7,60 @@ type FormValues = {
   username: string;
   email: string;
   identity: string;
+  social: {
+    twitter: string;
+    facebook: string;
+  };
+  phoneNumbers: string[];
+  phNumbers: {
+    number: string;
+  }[];
+  age: number;
+  dob: Date;
 };
 export const YoutubeForm = () => {
-  const form = useForm<FormValues>();
+  const form = useForm<FormValues>({
+    defaultValues: {
+      username: "madman",
+      email: "",
+      identity: "",
+      social: {
+        twitter: "",
+        facebook: "",
+      },
+      phoneNumbers: ["1234567890", "0987654321"],
+      phNumbers: [
+        {
+          number: "",
+        },
+      ],
+      age: 0,
+      dob: new Date(),
+    },
+    // defaultValues: async () => {
+    //   const response = await fetch(
+    //     "https://jsonplaceholder.typicode.com/users/1"
+    //   );
+    //   const data = await response.json();
+    //   return {
+    //     username: "madman",
+    //     email: data.email,
+    //     identity: "",
+    //   };
+    // },
+  });
+
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
   } = form;
+
+  const { fields, append, remove } = useFieldArray({
+    name: "phNumbers",
+    control,
+  });
   count++;
 
   const submitFn = (data: FormValues) => {
@@ -60,6 +105,90 @@ export const YoutubeForm = () => {
         <div>
           <label htmlFor="identity">Identity</label>
           <input type="text" id="identity" {...register("identity")} />
+        </div>
+        <div>
+          <label htmlFor="twitter">Twitter</label>
+          <input type="text" id="twitter" {...register("social.twitter")} />
+        </div>
+        <div>
+          <label htmlFor="facebook">Facebook</label>
+          <input type="text" id="facebook" {...register("social.facebook")} />
+        </div>
+        <div>
+          <label htmlFor="primary-phone">Primary Phone</label>
+          <input
+            type="text"
+            id="primary-phone"
+            {...register("phoneNumbers.0")}
+          />
+        </div>
+        <div>
+          <label htmlFor="secondary-phone">Secondary Phone</label>
+          <input
+            type="text"
+            id="secondary-phone"
+            {...register("phoneNumbers.1")}
+          />
+        </div>
+        <div>
+          <label>List of phone numbers</label>
+          <div>
+            {fields.map((field, index) => {
+              return (
+                <div className="form-control" key={field.id}>
+                  <input
+                    type="text"
+                    {...register(`phNumbers.${index}.number`)}
+                  />
+                  {index > 0 && (
+                    <button onClick={() => remove(index)}>
+                      Remove Phone Number
+                    </button>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div>
+            <label htmlFor="age">Age</label>
+            <input
+              type="number"
+              id="age"
+              {...register("age", {
+                valueAsNumber: true,
+                required: {
+                  value: true,
+                  message: "age is mandatory",
+                },
+              })}
+            />
+            <p className="error">{errors.age?.message}</p>
+          </div>
+          <div>
+            <label htmlFor="dob">DOB</label>
+            <input
+              type="date"
+              id="dob"
+              {...register("dob", {
+                valueAsDate: true,
+                required: {
+                  value: true,
+                  message: "dob is mandatory",
+                },
+              })}
+            />
+            <p className="error">{errors.dob?.message}</p>
+          </div>
+          <button
+            onClick={() =>
+              append({
+                number: "",
+              })
+            }
+          >
+            Add Phone Number
+          </button>
         </div>
 
         <button>submit</button>
