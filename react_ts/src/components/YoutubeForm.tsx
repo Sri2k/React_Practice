@@ -171,6 +171,50 @@ export const YoutubeForm = () => {
               );
             })}
           </div>
+<<<<<<<<< Temporary merge branch 1
+
+          <div>
+            <label htmlFor="age">Age</label>
+            <input
+              type="number"
+              id="age"
+              {...register("age", {
+                valueAsNumber: true,
+                required: {
+                  value: true,
+                  message: "age is mandatory",
+                },
+              })}
+            />
+            <p className="error">{errors.age?.message}</p>
+          </div>
+          <div>
+            <label htmlFor="dob">DOB</label>
+            <input
+              type="date"
+              id="dob"
+              {...register("dob", {
+                valueAsDate: true,
+                required: {
+                  value: true,
+                  message: "dob is mandatory",
+                },
+              })}
+            />
+            <p className="error">{errors.dob?.message}</p>
+          </div>
+          <button
+            onClick={() =>
+              append({
+                number: "",
+              })
+            }
+          >
+            Add Phone Number
+          </button>
+        </div>
+=========
+>>>>>>>>> Temporary merge branch 2
 
           <div>
             <label htmlFor="age">Age</label>
