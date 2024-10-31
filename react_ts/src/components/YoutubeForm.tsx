@@ -1,7 +1,5 @@
 import { useFieldArray, useForm } from "react-hook-form";
-import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
-import { useEffect } from "react";
 import { useEffect } from "react";
 
 let count = 0;
@@ -53,44 +51,11 @@ export const YoutubeForm = () => {
     // },
   });
 
-  const form = useForm<FormValues>({
-    defaultValues: {
-      username: "madman",
-      email: "",
-      identity: "",
-      social: {
-        twitter: "",
-        facebook: "",
-      },
-      phoneNumbers: ["1234567890", "0987654321"],
-      phNumbers: [
-        {
-          number: "",
-        },
-      ],
-      age: 0,
-      dob: new Date(),
-    },
-    // defaultValues: async () => {
-    //   const response = await fetch(
-    //     "https://jsonplaceholder.typicode.com/users/1"
-    //   );
-    //   const data = await response.json();
-    //   return {
-    //     username: "madman",
-    //     email: data.email,
-    //     identity: "",
-    //   };
-    // },
-  });
-
   const {
     register,
     control,
     handleSubmit,
     formState: { errors },
-    watch,
-    getValues,
     watch,
     getValues,
   } = form;
@@ -100,10 +65,6 @@ export const YoutubeForm = () => {
     control,
   });
 
-  const { fields, append, remove } = useFieldArray({
-    name: "phNumbers",
-    control,
-  });
   count++;
 
   //const watchValues = watch();
@@ -125,23 +86,9 @@ export const YoutubeForm = () => {
   const handleGetValues = () => {
     console.log("getValues", getValues("social"));
   };
-
-  useEffect(() => {
-    const subscription = watch((values) => console.log("values: ", values));
-
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, [watch]);
-
-  const handleGetValues = () => {
-    console.log("getValues", getValues("social"));
-  };
   return (
     <div>
       <h1>Form rendering count: {count / 2}</h1>
-      {/* <h1>Form values: {JSON.stringify(watchValues)}</h1> */}
-
       {/* <h1>Form values: {JSON.stringify(watchValues)}</h1> */}
 
       <form onSubmit={handleSubmit(submitFn)} noValidate>
