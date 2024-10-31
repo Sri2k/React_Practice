@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import { createContext } from "react";
 
 export interface UserContextProps {
   user: null | { username: string; password: string };
