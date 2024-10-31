@@ -1,5 +1,6 @@
 import { useFieldArray, useForm } from "react-hook-form";
 import { DevTool } from "@hookform/devtools";
+import { useEffect } from "react";
 
 let count = 0;
 
@@ -55,6 +56,8 @@ export const YoutubeForm = () => {
     control,
     handleSubmit,
     formState: { errors },
+    watch,
+    getValues,
   } = form;
 
   const { fields, append, remove } = useFieldArray({
@@ -63,12 +66,28 @@ export const YoutubeForm = () => {
   });
   count++;
 
+  //const watchValues = watch();
+
   const submitFn = (data: FormValues) => {
     console.log(data);
+  };
+
+  useEffect(() => {
+    const subscription = watch((values) => console.log("values: ", values));
+
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, [watch]);
+
+  const handleGetValues = () => {
+    console.log("getValues", getValues("social"));
   };
   return (
     <div>
       <h1>Form rendering count: {count / 2}</h1>
+      {/* <h1>Form values: {JSON.stringify(watchValues)}</h1> */}
+
       <form onSubmit={handleSubmit(submitFn)} noValidate>
         <div>
           <label htmlFor="username">Username</label>
@@ -150,6 +169,7 @@ export const YoutubeForm = () => {
             })}
           </div>
 
+
           <div>
             <label htmlFor="age">Age</label>
             <input
@@ -173,7 +193,7 @@ export const YoutubeForm = () => {
               {...register("dob", {
                 valueAsDate: true,
                 required: {
-                  value: true,
+                  value: false,
                   message: "dob is mandatory",
                 },
               })}
@@ -190,7 +210,9 @@ export const YoutubeForm = () => {
             Add Phone Number
           </button>
         </div>
-
+        <button type="submit" onClick={() => handleGetValues()}>
+          Get Values
+        </button>
         <button>submit</button>
       </form>
       <DevTool control={control} />
